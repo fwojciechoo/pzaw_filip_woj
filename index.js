@@ -53,8 +53,8 @@ const server = http.createServer(function (req, res) {
     res.setHeader("Content-Type", "application/json");
     res.end(JSON.stringify(content));
   }
-
-  // Unknown request
+gowno
+  // Unknown reques
   res.statusCode = 404;
   res.end();
 });
