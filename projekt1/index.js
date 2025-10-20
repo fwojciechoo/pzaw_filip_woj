@@ -91,7 +91,7 @@ const server = createServer((req, res) => {
                 res.end('metoda n istn\n');
         }
         else{
-                res.writeHead(200, { 'Content-Type': 'image/x-icon'});
+                res.writeHead(200, { 'Content-Type' : 'image/vnd.microsoft.icon'});
                 res.end(icon);
         }
     }
