@@ -8,6 +8,7 @@ const app = express();
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded());
+app.use(morgan("dev"));
 
 function log_request(req, res, next) {
   console.log(`Request ${req.method} ${req.path}`);
