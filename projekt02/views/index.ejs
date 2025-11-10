@@ -1,0 +1,28 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <h1><%= title %></h1>
+
+  <a href="/form">Dodaj nowy wpis</a>
+
+  <% if (entries.length === 0) { %>
+    <p>Brak wpisów. Bądź pierwszą osobą, która coś napisze!</p>
+  <% } else { %>
+    <ul>
+      <% entries.forEach(entry => { %>
+        <li>
+          <strong><%= entry.name %></strong> napisał(a):
+          <blockquote><%= entry.message %></blockquote>
+          <small><%= entry.date %></small>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+</body>
+</html>

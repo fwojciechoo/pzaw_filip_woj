@@ -1,0 +1,16 @@
+
+{
+  "name": "projekt02",
+  "version": "1.0.0",
+  "description": "Księga gości - projekt Express.js (PZAW)",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.9",
+    "express": "^4.19.2",
+    "morgan": "^1.10.0"
+  }
+}

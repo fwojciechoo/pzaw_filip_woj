@@ -1,0 +1,24 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <h1><%= title %></h1>
+
+  <form method="POST" action="/add">
+    <label>Imię:</label><br>
+    <input type="text" name="name" required><br><br>
+
+    <label>Wiadomość:</label><br>
+    <textarea name="message" rows="4" cols="40" required></textarea><br><br>
+
+    <button type="submit">Dodaj wpis</button>
+  </form>
+
+  <p><a href="/">Powrót</a></p>
+</body>
+</html>
