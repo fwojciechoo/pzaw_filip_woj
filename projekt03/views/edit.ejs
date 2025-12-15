@@ -1,0 +1,6 @@
+<h2>Edytuj element</h2>
+<form method="POST" action="/edit/<%= item.id %>">
+<input name="name" value="<%= item.name %>" required>
+<textarea name="description"><%= item.description %></textarea>
+<button>Zapisz</button>
+</form>

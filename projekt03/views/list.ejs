@@ -1,0 +1,13 @@
+<h2>Lista elementów</h2>
+<a href="/add">Dodaj</a>
+<ul>
+<% items.forEach(item => { %>
+<li>
+<b><%= item.name %></b> - <%= item.description %>
+<a href="/edit/<%= item.id %>">Edytuj</a>
+<form action="/delete/<%= item.id %>" method="POST" style="display:inline;">
+<button>Usuń</button>
+</form>
+</li>
+<% }) %>
+</ul>
