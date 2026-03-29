@@ -1,0 +1,28 @@
+
+<h1>Książka zapisów hotelu</h1>
+
+<table border="1">
+<tr>
+  <th>Gość</th>
+  <th>Pokój</th>
+  <th>Check-in</th>
+  <th>Check-out</th>
+</tr>
+<% bookings.forEach(b => { %>
+<tr>
+  <td><%= b.guest_name %></td>
+  <td><%= b.room_number %></td>
+  <td><%= b.check_in %></td>
+  <td><%= b.check_out %></td>
+</tr>
+<% }) %>
+</table>
+
+<h2>Nowa rezerwacja</h2>
+<form method="POST" action="/book">
+  <input name="guest_name" placeholder="Imię i nazwisko" required>
+  <input name="room_number" type="number" placeholder="Nr pokoju" required>
+  <input name="check_in" type="date" required>
+  <input name="check_out" type="date" required>
+  <button>Zapisz</button>
+</form>

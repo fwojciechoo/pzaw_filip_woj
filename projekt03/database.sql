@@ -1,8 +1,11 @@
-CREATE DATABASE IF NOT EXISTS projekt03;
-USE projekt03;
 
-CREATE TABLE IF NOT EXISTS items (
+CREATE DATABASE IF NOT EXISTS hotel_db;
+USE hotel_db;
+
+CREATE TABLE bookings (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  description TEXT
+  guest_name VARCHAR(100) NOT NULL,
+  room_number INT NOT NULL,
+  check_in DATE NOT NULL,
+  check_out DATE NOT NULL
 );

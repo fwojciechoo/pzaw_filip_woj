@@ -1,0 +1,160 @@
+html {
+  --bg-main: #0f172a;
+  --bg-card: #1e293b;
+  --bg-accent: #334155;
+  --bg-hover: #475569;
+
+  --text-main: #e2e8f0;
+  --text-muted: #94a3b8;
+  --text-link: #38bdf8;
+  --text-error: #f87171;
+
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: var(--text-main);
+}
+
+html[data-theme='light'] {
+  --bg-main: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-accent: #e2e8f0;
+  --bg-hover: #cbd5f5;
+
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-link: #2563eb;
+  --text-error: #dc2626;
+
+  background: #f1f5f9;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  background: var(--bg-card);
+  width: 60rem;
+  margin: 2rem 0;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  overflow: hidden;
+}
+
+/* HEADER + SETTINGS */
+
+.settings, header {
+  display: flex;
+  padding: 1rem;
+  background: var(--bg-accent);
+}
+
+.settings section.controls,
+header section.controls {
+  margin-left: auto;
+}
+
+/* MAIN */
+
+main {
+  padding: 1.5rem;
+}
+
+/* LINKS */
+
+a {
+  color: var(--text-link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* FORMS */
+
+.form {
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0;
+}
+
+.form-row label {
+  width: 12rem;
+  color: var(--text-muted);
+}
+
+.form-input input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: var(--bg-accent);
+  color: var(--text-main);
+}
+
+.form-error {
+  color: var(--text-error);
+  font-size: 0.8rem;
+}
+
+/* BUTTONS */
+
+button, .cookieButton {
+  background: var(--bg-accent);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  color: var(--text-main);
+  transition: 0.2s;
+}
+
+button:hover, .cookieButton:hover {
+  background: var(--bg-hover);
+}
+
+/* FLASHCARDS */
+
+#flashcards li {
+  background: var(--bg-accent);
+  margin: 0.3rem 0;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+/* COOKIE BANNER */
+
+.cookie-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+  width: 320px;
+  padding: 1rem;
+
+  background: var(--bg-card);
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+
+  font-size: 0.85rem;
+}
+
+#buttonContainer {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+#buttonContainer a {
+  flex: 1;
+  text-align: center;
+}
+

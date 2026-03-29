@@ -1,0 +1,86 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f4f8;
+    margin: 0;
+    padding: 0;
+  }
+  
+  header {
+    background: #1e90ff;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  main {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  
+  form input, form textarea, form select, form button {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  
+  form button {
+    background: #1e90ff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  form button:hover {
+    background: #0d6efd;
+  }
+  
+  ul.entries {
+    list-style: none;
+    padding: 0;
+  }
+  
+  ul.entries li {
+    border-bottom: 1px solid #eee;
+    padding: 15px 0;
+  }
+  
+  .entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .entry-title {
+    font-weight: bold;
+    font-size: 18px;
+  }
+  
+  .entry-author {
+    font-style: italic;
+    color: #555;
+  }
+  
+  .entry-content {
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+  
+  nav a {
+    margin-right: 10px;
+    text-decoration: none;
+    color: #1e90ff;
+    font-weight: bold;
+  }
+  
+  nav a:hover {
+    text-decoration: underline;
+  }

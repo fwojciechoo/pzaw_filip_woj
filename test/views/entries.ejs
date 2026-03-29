@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Księga gości</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header><h1>Księga gości hotelu</h1></header>
+<main>
+  <nav>
+    <span>Witaj, <%= user.login %> (<%= user.role %>)</span> |
+    <a href="/add-entry">Dodaj wpis</a> |
+    <a href="/logout">Wyloguj</a>
+  </nav>
+
+  <% if (entries && entries.length > 0) { %>
+    <ul class="entries">
+      <% entries.forEach(entry => { %>
+        <li>
+          <strong><%= entry.title %></strong> od <%= entry.user_login %> | Ocena: <%= entry.rating %><br>
+          <p><%= entry.content %></p>
+
+          <% if (user.role === 'admin' || user.id === entry.user_id) { %>
+            <form method="POST" action="/delete-entry/<%= entry.id %>" style="display:inline;">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <button type="submit">Usuń wpis</button>
+            </form>
+
+            <form method="GET" action="/edit-entry/<%= entry.id %>" style="display:inline;">
+              <button type="submit">Edytuj</button>
+            </form>
+          <% } %>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>Brak wpisów w księdze gości.</p>
+  <% } %>
+</main>
+</body>
+</html>

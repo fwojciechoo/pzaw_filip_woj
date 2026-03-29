@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edytuj wpis</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header><h1>Księga gości hotelu</h1></header>
+<main>
+  <nav>
+    <a href="/entries">Powrót do wpisów</a> |
+    <a href="/logout">Wyloguj</a>
+  </nav>
+  <h2>Edytuj wpis</h2>
+  <form method="POST" action="/edit-entry/<%= entry.id %>">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <input type="text" name="title" value="<%= entry.title %>" required>
+    <textarea name="content" required><%= entry.content %></textarea>
+    <select name="rating" required>
+      <option value="">Ocena</option>
+      <option value="1" <%= entry.rating==1 ? 'selected' : '' %>>1</option>
+      <option value="2" <%= entry.rating==2 ? 'selected' : '' %>>2</option>
+      <option value="3" <%= entry.rating==3 ? 'selected' : '' %>>3</option>
+      <option value="4" <%= entry.rating==4 ? 'selected' : '' %>>4</option>
+      <option value="5" <%= entry.rating==5 ? 'selected' : '' %>>5</option>
+    </select>
+    <button type="submit">Zapisz zmiany</button>
+  </form>
+</main>
+</body>
+</html>

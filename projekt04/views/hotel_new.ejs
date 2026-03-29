@@ -1,0 +1,17 @@
+<%- include("head.partial.ejs") %>
+<main>
+  <h1><%= title %></h1>
+  <div>
+    <h3>Dodaj nowy hotel</h3>
+    <% if (locals.errors != null) {%>
+    <ul id="errors">
+      <% errors.forEach(function(error){ %>
+      <li><%= error %></li>
+      <% }) %>
+    </ul>
+    <% } %>
+    <%- include("forms/new_hotel.ejs") %>
+  </div>
+</main>
+
+<%- include("foot.partial.ejs") %>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Entry</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+  <h1>Hotel Guestbook</h1>
+</header>
+<main>
+  <nav>
+    <a href="/entries">Back to Entries</a> |
+    <a href="/logout">Logout</a>
+  </nav>
+  <h2>Add New Entry</h2>
+  <form method="POST" action="/add-entry">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <input type="text" name="title" placeholder="Title" required>
+    <textarea name="content" placeholder="Content" required></textarea>
+    <select name="rating" required>
+      <option value="">Rating</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>
+    <button type="submit">Add Entry</button>
+  </form>
+</main>
+</body>
+</html>

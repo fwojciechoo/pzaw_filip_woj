@@ -1,0 +1,26 @@
+<%- include("head.partial.ejs") %>
+<main>
+  <h1><%= title %></h1>
+  <% if (cardset.editableBy(user)) { %>
+    <a href="/edit/<%= cardset.slug %>" class="action-link">Zarządzaj opiniami</a>
+  <% } %>
+  <% if (cardset.cards && cardset.cards.length > 0) { %>
+    <ul id="flashcards">
+      <% cardset.cards.forEach(function(card){ %>
+      <li>
+        Użytkownik <%= cardset.author.username %>: <%= card.front %> - <%= card.back %>
+      </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>Nie ma żadnych opinii dla hotelu.</p>
+  <% } %>
+  <% if (cardset.editableBy(user)) { %>
+  <div>
+    <h3>Napisz opinie</h3>
+    <%- include("forms/new_review.ejs") %>
+  </div>
+  <% } %>
+</main>
+
+<%- include("foot.partial.ejs") %>

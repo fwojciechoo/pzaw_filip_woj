@@ -1,0 +1,1 @@
+Pełna wersja projektu księgi gości.
