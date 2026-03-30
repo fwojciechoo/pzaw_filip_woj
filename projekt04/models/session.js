@@ -8,8 +8,7 @@ const db = new DatabaseSync(db_path, { readBigInts: true });
 const SESSION_COOKIE = "__Host-fisz-id";
 const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
 
-// TODO(kleindan) no user model yet
-// remember to add Foreign Key relations later
+
 db.exec(`
   CREATE TABLE IF NOT EXISTS fc_session (
     id TEXT PRIMARY KEY,
@@ -51,7 +50,7 @@ function sessionHandler(req, res, next) {
     let sessionId = req.cookies[SESSION_COOKIE];
   }
 
-  // sessionId may look valid but might not exist in db
+ 
   if (sessionId != null) session = db_ops.get_session.get(sessionId);
 
   if (session != null) {

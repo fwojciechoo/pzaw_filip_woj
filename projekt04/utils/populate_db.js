@@ -1,5 +1,6 @@
 import user from "../models/user.js";
-import flashcards from "../models/flashcards.js";
+import flashcards from "../models/hotels.js";
+import hotels from "../models/hotels.js";
 
 const cardsets = {
   "Mariott": {
@@ -20,19 +21,18 @@ const cardsets = {
 
 console.log("Populating db...");
 
-// TODO(kleindan) prompt for admin password in the future
 let admin = await user.createUser("admin", "admin123");
 let errMsg = user.addAttribute(admin.id, "is_admin", true);
 if (errMsg) {
   console.error(errMsg);
 }
 
-let student = await user.createUser("student", "changeme");
+let test = await user.createUser("test", "test12345");
 
 Object.entries(cardsets).map(([slug, data]) => {
-  let category = flashcards.addCardset(slug, data.name, student);
+  let category = hotels.addCardset(slug, data.name, test);
   for (let card of data.cards) {
-    let c = flashcards.addCard(category.slug, card);
+    let c = hotels.addCard(category.slug, card);
   }
 });
 

@@ -206,10 +206,10 @@ app.post("/edit/:cardset_slug", auth.login_required, (req, res) => {
           cardset_name,
         );
         if (cardset != null) {
-          // cardset id may have changed due to name change
+          
           res.redirect("/view/" + cardset.slug);
         } else {
-          // This should never happen
+          
           res.write("Unexpected error while updating cardset");
           res.sendStatus(500);
         }

@@ -34,7 +34,7 @@ export function declineCookies(req, res) {
 }
 
 export function manageCookies(req, res) {
-  // TODO Handle cookie management
+  
   res.render("cookies_manage", {
     title: "Zarządzanie cookies",
   });
