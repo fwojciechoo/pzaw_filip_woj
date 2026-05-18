@@ -1,5 +1,5 @@
+import "dotenv/config";
 import user from "../models/user.js";
-import flashcards from "../models/hotels.js";
 import hotels from "../models/hotels.js";
 
 const cardsets = {
@@ -37,3 +37,4 @@ Object.entries(cardsets).map(([slug, data]) => {
 });
 
 console.log("Done!");
+

@@ -1,21 +1,21 @@
 <%- include("head.partial.ejs") %>
 <main>
   <h1><%= title %></h1>
-  <% if (cardset.editableBy(user)) { %>
+  <% if (user && user.is_admin) { %>
     <a href="/edit/<%= cardset.slug %>" class="action-link">Zarządzaj opiniami</a>
   <% } %>
   <% if (cardset.cards && cardset.cards.length > 0) { %>
     <ul id="flashcards">
       <% cardset.cards.forEach(function(card){ %>
       <li>
-        Użytkownik <%= cardset.author.username %>: <%= card.front %> - <%= card.back %>
+        Anonimowy użytkownik <%= card.front %> - <%= card.back %>
       </li>
       <% }) %>
     </ul>
   <% } else { %>
     <p>Nie ma żadnych opinii dla hotelu.</p>
   <% } %>
-  <% if (cardset.editableBy(user)) { %>
+  <% if (user) { %>
   <div>
     <h3>Napisz opinie</h3>
     <%- include("forms/new_review.ejs") %>

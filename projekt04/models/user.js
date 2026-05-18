@@ -70,12 +70,21 @@ export async function validatePassword(username, password) {
 }
 
 export function getUser(userId) {
-  let { id, username, attributes, created_at } = db_ops.get_user.get(userId);
+  const row = db_ops.get_user.get(userId);
+  if (!row) return null;
+
+  let attributes = {};
+  try {
+    attributes = row.attributes ? JSON.parse(row.attributes) : {};
+  } catch {
+    attributes = {};
+  }
+
   return {
-    id,
-    username,
-    created_at,
-    ...JSON.parse(attributes),
+    id: row.id,
+    username: row.username,
+    created_at: row.created_at,
+    ...attributes,
   };
 }
 

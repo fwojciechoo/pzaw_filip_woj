@@ -1,7 +1,8 @@
+import 'dotenv/config';
 import express from "express";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-import 'dotenv/config';
+
 
 import user from "./models/user.js";
 import hotels from "./models/hotels.js";
@@ -93,37 +94,34 @@ app.get("/view/:cardset_slug", (req, res) => {
   }
 });
 
-app.post("/add_card/:cardset_slug", auth.login_required, (req, res) => {
+app.post("/add_review/:cardset_slug", auth.login_required, (req, res) => {
   const cardset_slug = req.params.cardset_slug;
+
   if (!hotels.hasCardset(cardset_slug)) {
-    res.sendStatus(404);
-  } else {
-    if (!hotels.canEdit(cardset_slug, res.locals.user)) {
-      res.status(401);
-      res.redirect("/");
-    } else {
-      let card_data = {
-        front: req.body.front,
-        back: req.body.back,
-      };
-      var errors = hotels.validateCardData(card_data);
-      if (errors.length == 0) {
-        flashcards.addCard(cardset_slug, card_data);
-        res.redirect(`/view/${cardset_slug}`);
-      } else {
-        res.status(400);
-        res.render("new_review", {
-          errors,
-          title: "Nowa opinia",
-          front: req.body.front,
-          back: req.body.back,
-          cardset: {
-            id: cardset_slug,
-          },
-        });
-      }
-    }
+    return res.sendStatus(404);
   }
+
+  const card_data = {
+    front: req.body.front,
+    back: req.body.back,
+  };
+
+  const errors = hotels.validateCardData(card_data);
+
+  if (errors.length === 0) {
+    hotels.addCard(cardset_slug, card_data);
+    return res.redirect(`/view/${cardset_slug}`);
+  }
+
+  const cardset = hotels.getCardset(cardset_slug);
+
+  return res.status(400).render("new_review", {
+    errors,
+    title: "Nowa opinia",
+    front: req.body.front,
+    back: req.body.back,
+    cardset: { id: cardset_slug },
+  });
 });
 
 app.get("/add_card/:cardset_slug", auth.login_required, (req, res) => {
@@ -131,18 +129,24 @@ app.get("/add_card/:cardset_slug", auth.login_required, (req, res) => {
 });
 
 app.get("/new_hotel", auth.login_required, (req, res) => {
+  if (!res.locals.user?.is_admin) {
+    return res.status(403).redirect("/");
+  }
   res.render("hotel_new", {
     title: "Nowy hotel",
   });
 });
 
 app.post("/new_hotel", auth.login_required, (req, res) => {
+  if (!res.locals.user?.is_admin) {
+    return res.status(403).redirect("/");
+  }
   const cardset_name = req.body.name;
   var cardset_slug = null;
   var errors = hotels.validateCardsetName(cardset_name);
   if (errors.length == 0) {
     cardset_slug = hotels.generateCardsetSlug(cardset_name);
-    if (flashcards.hasCardset(cardset_slug)) {
+    if (hotels.hasCardset(cardset_slug)) {
       errors.push("hotel id is already taken");
     }
   }
@@ -165,10 +169,10 @@ app.get("/edit/:cardset_slug", auth.login_required, (req, res) => {
   const errors = [];
   var cardset = hotels.getCardset(cardset_slug);
   if (cardset != null) {
-    if (!cardset.editableBy(res.locals.user)) {
-      res.status(401);
-      res.redirect("/");
-    } else {
+    if (!res.locals.user?.is_admin) {
+      return res.status(403).redirect("/");
+    }
+     else {
       res.render("manage_reviews", {
         errors,
         title: "Zarzadządzaj opiniami",
@@ -183,15 +187,15 @@ app.get("/edit/:cardset_slug", auth.login_required, (req, res) => {
 app.post("/edit/:cardset_slug", auth.login_required, (req, res) => {
   const cardset_slug = req.params.cardset_slug;
   if (hotels.hasCardset(cardset_slug)) {
-    if (!hotels.canEdit(cardset_slug, res.locals.user)) {
-      res.status(401);
-      res.redirect("/");
-    } else {
+    if (!res.locals.user?.is_admin) {
+      return res.status(403).redirect("/");
+    }
+     else {
       const cardset_name = req.body.name;
       var new_cardset_slug = null;
-      const errors = flashcards.validateCardsetName(cardset_name);
+      const errors = hotels.validateCardsetName(cardset_name);
       if (errors.length == 0) {
-        new_cardset_slug = flashcards.generateCardsetSlug(cardset_name);
+        new_cardset_slug = hotels.generateCardsetSlug(cardset_name);
         if (
           new_cardset_slug !== cardset_slug &&
           hotels.hasCardset(new_cardset_slug)
@@ -230,13 +234,13 @@ app.post("/edit/:cardset_slug", auth.login_required, (req, res) => {
 app.post("/edit/:cardset_slug/:card_id", auth.login_required, (req, res) => {
   const cardset_slug = req.params.cardset_slug;
   const card_id = req.params.card_id;
-  if (!hotels.hasCardset(cardset_slug) || !flashcards.hasCard(card_id)) {
+  if (!hotels.hasCardset(cardset_slug) || !hotels.hasCard(card_id)) {
     res.sendStatus(404);
   } else {
-    if (!hotels.canEdit(cardset_slug, res.locals.user)) {
-      res.status(401);
-      res.redirect("/");
-    } else {
+    if (!res.locals.user?.is_admin) {
+      return res.status(403).redirect("/");
+    }
+     else {
       const card = {
         front: req.body.front,
         back: req.body.back,
@@ -268,11 +272,11 @@ app.post("/delete/:cardset_slug/:card_id", auth.login_required, (req, res) => {
   if (!hotels.hasCardset(cardset_slug) || !hotels.hasCard(card_id)) {
     res.sendStatus(404);
   } else {
-    if (!flashcards.canEdit(cardset_slug, res.locals.user)) {
-      res.status(401);
-      res.redirect("/");
-    } else {
-      flashcards.deleteCardById(card_id);
+    if (!res.locals.user?.is_admin) {
+      return res.status(403).redirect("/");
+    }
+     else {
+      hotels.deleteCardById(card_id);
       res.redirect(`/edit/${cardset_slug}`);
     }
   }

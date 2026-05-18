@@ -88,7 +88,6 @@ export function getCardset(slug) {
   let cardset = db_ops.get_cardset_by_slug.get(slug);
   if (cardset != null) {
     cardset.cards = db_ops.get_cards_by_cardset_id.all(cardset.id);
-    cardset.editableBy = cardsetEditableBy;
 
     return cardset;
   }
@@ -96,9 +95,7 @@ export function getCardset(slug) {
   return null;
 }
 
-function cardsetEditableBy(user) {
-  return user != null && (this.author_id === user.id || user.is_admin);
-}
+
 
 export function addCard(cardsetSlug, card) {
   return db_ops.insert_card_by_cardset_slug.get(
@@ -166,12 +163,15 @@ export function generateCardsetSlug(name) {
   return cardsetId;
 }
 
-export function canEdit(cardsetSlug, user) {
-  let cardset = db_ops.get_cardset_by_slug.get(cardsetSlug);
-  cardset.editableBy = cardsetEditableBy;
-
-  return cardset.editableBy(user);
+export function isAdmin(user) {
+  return user?.is_admin === true;
 }
+
+export function canReview(user) {
+  return user != null;
+}
+
+
 
 export default {
   getCardsetSummaries,
@@ -187,5 +187,4 @@ export default {
   validateCardData,
   validateCardsetName,
   generateCardsetSlug,
-  canEdit,
 };
