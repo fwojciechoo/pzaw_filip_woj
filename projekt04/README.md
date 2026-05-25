@@ -32,8 +32,12 @@ bash utils/generate_env.sh > .env
 node utils/populate_db.js
 
 node index.js
+```
 
-Dostępne na http://localhost:8000
+Dostępne na:
+
+```txt
+http://localhost:8000
 ```
 ## Konto testowe
 
