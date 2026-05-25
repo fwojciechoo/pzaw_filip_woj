@@ -4,15 +4,15 @@ const db_path = "./db.sqlite";
 const db = new DatabaseSync(db_path);
 
 db.exec(
-  `CREATE TABLE IF NOT EXISTS fc_cardsets (
-    cardset_id    INTEGER PRIMARY KEY,
+  `CREATE TABLE IF NOT EXISTS fc_hotels (
+    hotel_id    INTEGER PRIMARY KEY,
     slug          TEXT UNIQUE NOT NULL,
     name          TEXT NOT NULL,
     author_id     INTEGER NOT NULL REFERENCES fc_users(user_id) ON DELETE NO ACTION
   ) STRICT;
-  CREATE TABLE IF NOT EXISTS fc_cards (
-    card_id       INTEGER PRIMARY KEY,
-    cardset_id    INTEGER NOT NULL REFERENCES fc_cardsets(cardset_id) ON DELETE NO ACTION,
+  CREATE TABLE IF NOT EXISTS fc_reviews (
+    review_id       INTEGER PRIMARY KEY,
+    hotel_id    INTEGER NOT NULL REFERENCES fc_hotels(hotel_id) ON DELETE NO ACTION,
     front         TEXT NOT NULL,
     back          TEXT NOT NULL
   ) STRICT;
@@ -27,69 +27,69 @@ db.exec(
 );
 
 const db_ops = {
-  insert_cardset: db.prepare(
-    `INSERT INTO fc_cardsets (slug, name, author_id) 
-     VALUES (?, ?, ?) RETURNING cardset_id as id, slug, name;`,
+  insert_hotel: db.prepare(
+    `INSERT INTO fc_hotels (slug, name, author_id) 
+     VALUES (?, ?, ?) RETURNING hotel_id as id, slug, name;`,
   ),
-  update_cardset_by_slug: db.prepare(
-    `UPDATE fc_cardsets SET slug = $new_slug, name = $new_name 
-      WHERE slug = $slug RETURNING cardset_id AS id, slug, name, author_id;`,
+  update_hotel_by_slug: db.prepare(
+    `UPDATE fc_hotels SET slug = $new_slug, name = $new_name 
+      WHERE slug = $slug RETURNING hotel_id AS id, slug, name, author_id;`,
   ),
-  insert_card_by_cardset_slug: db.prepare(
-    `INSERT INTO fc_cards (cardset_id, front, back) VALUES (
-      (SELECT cardset_id FROM fc_cardsets WHERE slug = ?),
+  insert_review_by_hotel_slug: db.prepare(
+    `INSERT INTO fc_reviews (hotel_id, front, back) VALUES (
+      (SELECT hotel_id FROM fc_hotels WHERE slug = ?),
       ?, 
       ?
     ) 
-    RETURNING card_id AS id, front, back;`,
+    RETURNING review_id AS id, front, back;`,
   ),
-  get_cardset_summaries: db.prepare(
-    "SELECT slug, name, author_id FROM fc_cardsets;",
+  get_hotel_summaries: db.prepare(
+    "SELECT slug, name, author_id FROM fc_hotels;",
   ),
-  get_cardset_summary_by_cardset_id: db.prepare(
-    "SELECT slug, name, author_id FROM fc_cardsets WHERE cardset_id = ?;",
+  get_hotel_summary_by_hotel_id: db.prepare(
+    "SELECT slug, name, author_id FROM fc_hotels WHERE hotel_id = ?;",
   ),
-  get_cardset_by_slug: db.prepare(
-    "SELECT cardset_id AS id, slug, name, author_id FROM fc_cardsets WHERE slug = ?;",
+  get_hotel_by_slug: db.prepare(
+    "SELECT hotel_id AS id, slug, name, author_id FROM fc_hotels WHERE slug = ?;",
   ),
-  get_card_by_id: db.prepare(
-    "SELECT card_id AS id, front, back FROM fc_cards WHERE card_id = ?;",
+  get_review_by_id: db.prepare(
+    "SELECT review_id AS id, front, back FROM fc_reviews WHERE review_id = ?;",
   ),
-  update_card_by_id: db.prepare(
-    "UPDATE fc_cards SET front = ?, back = ? WHERE card_id = ? RETURNING card_id, front, back;",
+  update_review_by_id: db.prepare(
+    "UPDATE fc_reviews SET front = ?, back = ? WHERE review_id = ? RETURNING review_id, front, back;",
   ),
-  delete_card_by_id: db.prepare("DELETE FROM fc_cards WHERE card_id = ?;"),
-  get_cards_by_cardset_id: db.prepare(
-    "SELECT card_id AS id, front, back FROM fc_cards WHERE cardset_id = ?;",
+  delete_review_by_id: db.prepare("DELETE FROM fc_reviews WHERE review_id = ?;"),
+  get_reviews_by_hotel_id: db.prepare(
+    "SELECT review_id AS id, front, back FROM fc_reviews WHERE hotel_id = ?;",
   ),
 };
 
-export function getCardsetSummaries() {
-  var cardsets = db_ops.get_cardset_summaries.all();
-  return cardsets;
+export function getHotelSummaries() {
+  var hotels = db_ops.get_hotel_summaries.all();
+  return hotels;
 }
 
-export function getCardsetSummary(cardsetId) {
-  var cardsets = db_ops.get_cardset_summary_by_cardset_id.get(cardsetId);
-  return cardsets;
+export function getHotelSummary(hotelId) {
+  var hotels = db_ops.get_hotel_summary_by_hotel_id.get(hotelId);
+  return hotels;
 }
 
-export function hasCardset(slug) {
-  let cardset = db_ops.get_cardset_by_slug.get(slug);
-  return cardset != null;
+export function hasHotel(slug) {
+  let hotel = db_ops.get_hotel_by_slug.get(slug);
+  return hotel != null;
 }
 
-export function hasCard(cardId) {
-  let cardset = db_ops.get_card_by_id.get(cardId);
-  return cardset != null;
+export function hasReview(reviewId) {
+  let hotel = db_ops.get_review_by_id.get(reviewId);
+  return hotel != null;
 }
 
-export function getCardset(slug) {
-  let cardset = db_ops.get_cardset_by_slug.get(slug);
-  if (cardset != null) {
-    cardset.cards = db_ops.get_cards_by_cardset_id.all(cardset.id);
+export function getHotel(slug) {
+  let hotel = db_ops.get_hotel_by_slug.get(slug);
+  if (hotel != null) {
+    hotel.reviews = db_ops.get_reviews_by_hotel_id.all(hotel.id);
 
-    return cardset;
+    return hotel;
   }
 
   return null;
@@ -97,70 +97,70 @@ export function getCardset(slug) {
 
 
 
-export function addCard(cardsetSlug, card) {
-  return db_ops.insert_card_by_cardset_slug.get(
-    cardsetSlug,
-    card.front,
-    card.back,
+export function addReview(hotelSlug, review) {
+  return db_ops.insert_review_by_hotel_slug.get(
+    hotelSlug,
+    review.front,
+    review.back,
   );
 }
 
-export function updateCard(card) {
-  return db_ops.update_card_by_id.get(card.front, card.back, card.id);
+export function updateReview(review) {
+  return db_ops.update_review_by_id.get(review.front, review.back, review.id);
 }
 
-export function deleteCardById(cardId) {
-  return db_ops.delete_card_by_id.run(cardId);
+export function deleteReviewById(reviewId) {
+  return db_ops.delete_review_by_id.run(reviewId);
 }
 
-export function addCardset(slug, name, author) {
-  return db_ops.insert_cardset.get(slug, name, author.id);
+export function addHotel(slug, name, author) {
+  return db_ops.insert_hotel.get(slug, name, author.id);
 }
 
-export function updateCardset(slug, newSlug, newName) {
-  return db_ops.update_cardset_by_slug.get({
+export function updateHotel(slug, newSlug, newName) {
+  return db_ops.update_hotel_by_slug.get({
     $slug: slug,
     $new_slug: newSlug,
     $new_name: newName,
   });
 }
 
-export function validateCardData(card) {
+export function validateReviewData(review) {
   var errors = [];
   var fields = ["front", "back"];
   for (let field of fields) {
-    if (!card.hasOwnProperty(field)) errors.push(`Missing field '${field}'`);
+    if (!review.hasOwnProperty(field)) errors.push(`Missing field '${field}'`);
     else {
-      if (typeof card[field] != "string")
+      if (typeof review[field] != "string")
         errors.push(`'${field}' expected to be string`);
       else {
-        if (card[field].length < 1 || card[field].length > 500)
+        if (review[field].length < 1 || review[field].length > 500)
           errors.push(`'${field}' expected length: 1-500`);
       }
     }
   }
   return errors;
 }
-export function validateCardsetName(name) {
+export function validateHotelName(name) {
   var errors = [];
   if (typeof name != "string") {
-    errors.push("Cardset name should be a string");
+    errors.push("Hotel name should be a string");
   } else {
     if (name.length < 3 || name.length > 100) {
-      errors.push("Cardset name should have 3-100 characters");
+      errors.push("Hotel name should have 3-100 characters");
     }
   }
 
   return errors;
 }
 
-export function generateCardsetSlug(name) {
-  const cardsetId = name
+export function generateHotelSlug(name) {
+  const hotelId = name
     .toLowerCase()
     .replace(/(\s|[.-])+/g, "-")
     .replace(/[^a-z0-9.-]/g, "");
 
-  return cardsetId;
+  return hotelId;
 }
 
 export function isAdmin(user) {
@@ -174,17 +174,17 @@ export function canReview(user) {
 
 
 export default {
-  getCardsetSummaries,
-  getCardsetSummary,
-  hasCard,
-  hasCardset,
-  getCardset,
-  addCard,
-  updateCard,
-  deleteCardById,
-  addCardset,
-  updateCardset,
-  validateCardData,
-  validateCardsetName,
-  generateCardsetSlug,
+  getHotelSummaries,
+  getHotelSummary,
+  hasReview,
+  hasHotel,
+  getHotel,
+  addReview,
+  updateReview,
+  deleteReviewById,
+  addHotel,
+  updateHotel,
+  validateReviewData,
+  validateHotelName,
+  generateHotelSlug,
 };

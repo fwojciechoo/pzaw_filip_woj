@@ -1,10 +1,10 @@
-<form action="/add_review/<%=cardset.slug%>" method="POST">
+<form action="/add_review/<%=hotel.slug%>" method="POST">
   <div>
-    <label for="card_front">Tytuł</label>
+    <label for="review_front">Tytuł</label>
     <input
       type="text"
       name="front"
-      id="card_front"
+      id="review_front"
       required
       minlength="1"
       maxlength="500"
@@ -14,11 +14,11 @@
     />
   </div>
   <div>
-    <label for="card_back">Tekst</label>
+    <label for="review_back">Tekst</label>
     <input
       type="text"
       name="back"
-      id="card_front"
+      id="review_front"
       required
       minlength="1"
       maxlength="500"

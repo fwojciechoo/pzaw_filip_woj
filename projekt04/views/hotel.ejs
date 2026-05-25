@@ -2,13 +2,13 @@
 <main>
   <h1><%= title %></h1>
   <% if (user && user.is_admin) { %>
-    <a href="/edit/<%= cardset.slug %>" class="action-link">Zarządzaj opiniami</a>
+    <a href="/edit/<%= hotel.slug %>" class="action-link">Zarządzaj opiniami</a>
   <% } %>
-  <% if (cardset.cards && cardset.cards.length > 0) { %>
-    <ul id="flashcards">
-      <% cardset.cards.forEach(function(card){ %>
+  <% if (hotel.reviews && hotel.reviews.length > 0) { %>
+    <ul id="hotelreviews">
+      <% hotel.reviews.forEach(function(review){ %>
       <li>
-        Anonimowy użytkownik <%= card.front %> - <%= card.back %>
+        Anonimowy użytkownik <%= review.front %> - <%= review.back %>
       </li>
       <% }) %>
     </ul>

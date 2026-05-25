@@ -5,7 +5,7 @@ import { getUser } from "./user.js";
 const db_path = "./db.sqlite";
 const db = new DatabaseSync(db_path, { readBigInts: true });
 
-const SESSION_COOKIE = "__Host-fisz-id";
+const SESSION_COOKIE = "__Host-hotel-id";
 const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
 
 

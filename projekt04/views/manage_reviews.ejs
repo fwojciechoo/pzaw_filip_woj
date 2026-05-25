@@ -10,22 +10,22 @@
     </ul>
     <% } %>
     <%- include("forms/edit_name.ejs") %>
-    <% if (locals.cardset.cards && locals.cardset.cards.length > 0) { %>
-      <ul id="flashcards">
-        <% cardset.cards.forEach(function(card){ %>
+    <% if (locals.hotel.reviews && locals.hotel.reviews.length > 0) { %>
+      <ul id="hotelreviews">
+        <% hotel.reviews.forEach(function(review){ %>
         <li>
-          <%- include("forms/edit_review.ejs", {card, cardset}) %>
-          <form class="flashcard-action" action="/delete/<%= cardset.slug %>/<%= card.id %>" method="POST">
+          <%- include("forms/edit_review.ejs", {review, hotel}) %>
+          <form class="hotelreview-action" action="/delete/<%= hotel.slug %>/<%= review.id %>" method="POST">
             <button>Usuń</button>
           </form>
         </li>
         <% }) %>
       </ul>
     <% } else { %>
-      <p>W tym zestawie nie ma żadnych fiszek. Dodaj nowe poniżej.</p>
+      <p>W tym zestawie nie ma żadnych hotelek. Dodaj nowe poniżej.</p>
     <% } %>
   </div>
-  <a href="/view/<%= cardset.slug %>">Powrót</a>
+  <a href="/view/<%= hotel.slug %>">Powrót</a>
 </main>
 
 <%- include("foot.partial.ejs") %>

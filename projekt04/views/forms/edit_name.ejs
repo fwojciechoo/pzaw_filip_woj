@@ -1,15 +1,15 @@
-<form action="/edit/<%= cardset.slug %>" method="POST">
+<form action="/edit/<%= hotel.slug %>" method="POST">
   <div>
-    <label for="cardset_name">hotel</label>
+    <label for="hotel_name">hotel</label>
     <input
       type="text"
       name="name"
-      id="cardset_name"
+      id="hotel_name"
       required
       minlength="3"
       maxlength="100"
-      <% if (locals.cardset.name){ %>
-      value="<%= cardset.name %>"
+      <% if (locals.hotel.name){ %>
+      value="<%= hotel.name %>"
       <% }%>
     />
   </div>
