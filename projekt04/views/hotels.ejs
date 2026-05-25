@@ -15,9 +15,9 @@
     <li><a href="/view/<%= cardset.slug %>"><%= cardset.name %></a></li>
     <% }) %>
   </ul>
-  <% if (user != null) { %>
-  <a href="/new_hotel">Dodaj nowy hotel</a>
-  <% } %>
+  <% if (user && user.is_admin) { %>
+    <a href="/new_hotel">Dodaj hotel</a>
+<% } %>
 </main>
 
 <%- include("foot.partial.ejs") %>
