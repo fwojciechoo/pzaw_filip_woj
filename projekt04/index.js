@@ -67,31 +67,35 @@ app.get("/", (req, res) => {
 
 app.get("/view/:hotel_slug", (req, res) => {
   const hotel = hotels.getHotel(req.params.hotel_slug);
-  hotel.author = user.getUser(hotel.author_id);
-  if (hotel != null) {
-    if (res.locals.app.cookie_consent) {
-      let last_viewed_dirty = req.signedCookies[LAST_VIEWED_COOKIE] || [];
-      let last_viewed = [
-        hotel.hotel_slug,
-        ...last_viewed_dirty
-          .map((x) => parseInt(x, 10))
-          .filter((x) => !isNaN(x) && x !== hotel.hotel_slug)
-          .slice(0, 2),
-      ];
-      res.cookie(LAST_VIEWED_COOKIE, last_viewed, {
-        httpOnly: true,
-        secure: true,
-        maxAge: ONE_MONTH,
-        signed: true,
-      });
-    }
-    res.render("hotel", {
-      title: hotel.name,
-      hotel,
-    });
-  } else {
-    res.sendStatus(404);
+
+  if (hotel == null) {
+    return res.sendStatus(404);
   }
+
+  hotel.author = user.getUser(hotel.author_id);
+
+  if (res.locals.app.cookie_consent) {
+    let last_viewed_dirty = req.signedCookies[LAST_VIEWED_COOKIE] || [];
+    let last_viewed = [
+      hotel.hotel_slug,
+      ...last_viewed_dirty
+        .map((x) => parseInt(x, 10))
+        .filter((x) => !isNaN(x) && x !== hotel.hotel_slug)
+        .slice(0, 2),
+    ];
+
+    res.cookie(LAST_VIEWED_COOKIE, last_viewed, {
+      httpOnly: true,
+      secure: true,
+      maxAge: ONE_MONTH,
+      signed: true,
+    });
+  }
+
+  res.render("hotel", {
+    title: hotel.name,
+    hotel,
+  });
 });
 
 app.post("/add_review/:hotel_slug", auth.login_required, (req, res) => {
@@ -104,6 +108,7 @@ app.post("/add_review/:hotel_slug", auth.login_required, (req, res) => {
   const review_data = {
     front: req.body.front,
     back: req.body.back,
+    author_id: res.locals.user.id,
   };
 
   const errors = hotels.validateReviewData(review_data);
@@ -114,13 +119,15 @@ app.post("/add_review/:hotel_slug", auth.login_required, (req, res) => {
   }
 
   const hotel = hotels.getHotel(hotel_slug);
+  hotel.author = user.getUser(hotel.author_id);
+  hotel.reviews = hotels.getReviews(hotel.id);
 
-  return res.status(400).render("new_review", {
+  return res.status(400).render("hotel", {
     errors,
-    title: "Nowa opinia",
+    title: hotel.name,
     front: req.body.front,
     back: req.body.back,
-    hotel: { id: hotel_slug },
+    hotel,
   });
 });
 
@@ -219,10 +226,13 @@ app.post("/edit/:hotel_slug", auth.login_required, (req, res) => {
         }
       } else {
         const hotel = hotels.getHotel(hotel_slug);
-        res.render("manage_reviews", {
+
+        return res.status(400).render("hotel", {
           errors,
-          title: "Zarzadządzaj opiniami",
+          title: hotel.name,
           hotel,
+          front: req.body.front,
+          back: req.body.back,
         });
       }
     }
@@ -266,6 +276,24 @@ app.post("/edit/:hotel_slug/:review_id", auth.login_required, (req, res) => {
   res.redirect(`/edit/${req.params.hotel_slug}`);
 });
 
+app.post("/delete_my_review/:hotel_slug/:review_id", auth.login_required, (req, res) => {
+  const hotel_slug = req.params.hotel_slug;
+  const review_id = req.params.review_id;
+
+  if (!hotels.hasHotel(hotel_slug) || !hotels.hasReview(review_id)) {
+    return res.sendStatus(404);
+  }
+
+  const review = hotels.getReview(review_id);
+
+  if (review.author_id !== res.locals.user.id) {
+    return res.status(403).redirect(`/view/${hotel_slug}`);
+  }
+
+  hotels.deleteReviewById(review_id);
+  res.redirect(`/view/${hotel_slug}`);
+});
+
 app.post("/delete/:hotel_slug/:review_id", auth.login_required, (req, res) => {
   const hotel_slug = req.params.hotel_slug;
   const review_id = req.params.review_id;
@@ -284,6 +312,15 @@ app.post("/delete/:hotel_slug/:review_id", auth.login_required, (req, res) => {
 
 app.post("/edit/:hotel_slug/:review_id", auth.login_required, (req, res) => {
   res.redirect(`/edit/${req.params.hotel_slug}`);
+});
+
+app.post("/delete_hotel/:hotel_slug", auth.login_required, (req, res) => {
+  if (!res.locals.user?.is_admin) {
+    return res.status(403).redirect("/");
+  }
+
+  hotels.deleteHotelBySlug(req.params.hotel_slug);
+  res.redirect("/");
 });
 
 app.listen(port, () => {

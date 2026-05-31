@@ -32,6 +32,7 @@ let test = await user.createUser("test", "test12345");
 Object.entries(hotelsData).map(([slug, data]) => {
   let category = hotels.addHotel(slug, data.name, test);
   for (let review of data.reviews) {
+    review.author_id = test.id;
     let c = hotels.addReview(category.slug, review);
   }
 });

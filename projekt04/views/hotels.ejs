@@ -12,7 +12,15 @@
   <% } /* (last_viewed_hotels.length > 0) */ %>
   <ul id="hotels">
     <% hotels.forEach(function(hotel){ %>
-    <li><a href="/view/<%= hotel.slug %>"><%= hotel.name %></a></li>
+      <li>
+        <a href="/view/<%= hotel.slug %>"><%= hotel.name %></a>
+  
+        <% if (user && user.is_admin) { %>
+          <form action="/delete_hotel/<%= hotel.slug %>" method="POST" style="display:inline;">
+            <button>Usuń hotel</button>
+          </form>
+        <% } %>
+      </li>
     <% }) %>
   </ul>
   <% if (user && user.is_admin) { %>

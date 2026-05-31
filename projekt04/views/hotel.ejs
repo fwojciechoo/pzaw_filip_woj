@@ -7,9 +7,15 @@
   <% if (hotel.reviews && hotel.reviews.length > 0) { %>
     <ul id="hotelreviews">
       <% hotel.reviews.forEach(function(review){ %>
-      <li>
-        Anonimowy użytkownik <%= review.front %> - <%= review.back %>
-      </li>
+        <li>
+          <b><%= review.username %>: </b> <%= review.front %> - <%= review.back %>
+          <br>
+          <% if (user && review.author_id === user.id) { %>
+            <form action="/delete_my_review/<%= hotel.slug %>/<%= review.id %>" method="POST" style="display:inline;">
+              <button><b><i>Usuń</i></b></button>
+            </form>
+          <% } %>
+        </li>
       <% }) %>
     </ul>
   <% } else { %>

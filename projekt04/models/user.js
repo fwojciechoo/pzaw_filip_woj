@@ -17,7 +17,7 @@ const db_path = "./db.sqlite";
 const db = new DatabaseSync(db_path);
 
 db.exec(`
-  CREATE TABLE IF NOT EXISTS fc_users (
+  CREATE TABLE IF NOT EXISTS ht_users (
     user_id         INTEGER PRIMARY KEY,
     username        TEXT UNIQUE,
     passhash        TEXT,
@@ -28,22 +28,22 @@ db.exec(`
 
 const db_ops = {
   create_user: db.prepare(
-    "INSERT INTO fc_users (username, passhash, created_at) VALUES (?, ?, ?) RETURNING user_id AS id;",
+    "INSERT INTO ht_users (username, passhash, created_at) VALUES (?, ?, ?) RETURNING user_id AS id;",
   ),
   get_user: db.prepare(
-    "SELECT user_id AS id, username, attributes, created_at FROM fc_users WHERE id = ?;",
+    "SELECT user_id AS id, username, attributes, created_at FROM ht_users WHERE id = ?;",
   ),
   find_by_username: db.prepare(
-    "SELECT user_id AS id, username, attributes, created_at FROM fc_users WHERE username = ?;",
+    "SELECT user_id AS id, username, attributes, created_at FROM ht_users WHERE username = ?;",
   ),
   get_auth_data: db.prepare(
-    "SELECT user_id AS id, passhash FROM fc_users WHERE username = ?;",
+    "SELECT user_id AS id, passhash FROM ht_users WHERE username = ?;",
   ),
   get_attributes: db.prepare(
-    `SELECT attributes FROM fc_users WHERE user_id = ?;`,
+    `SELECT attributes FROM ht_users WHERE user_id = ?;`,
   ),
   update_attributes: db.prepare(
-    `UPDATE fc_users SET attributes = ? WHERE user_id = ?;`,
+    `UPDATE ht_users SET attributes = ? WHERE user_id = ?;`,
   ),
 };
 

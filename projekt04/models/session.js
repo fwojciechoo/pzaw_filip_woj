@@ -10,7 +10,7 @@ const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
 
 
 db.exec(`
-  CREATE TABLE IF NOT EXISTS fc_session (
+  CREATE TABLE IF NOT EXISTS ht_session (
     id TEXT PRIMARY KEY,
     user_id         INTEGER,
     created_at      INTEGER
@@ -19,12 +19,12 @@ db.exec(`
 
 const db_ops = {
   create_session: db.prepare(
-    "INSERT INTO fc_session (id, user_id, created_at) VALUES (?, ?, ?) RETURNING id, user_id, created_at;",
+    "INSERT INTO ht_session (id, user_id, created_at) VALUES (?, ?, ?) RETURNING id, user_id, created_at;",
   ),
   get_session: db.prepare(
-    "SELECT id, user_id, created_at from fc_session WHERE id = ?;",
+    "SELECT id, user_id, created_at from ht_session WHERE id = ?;",
   ),
-  delete_session: db.prepare("DELETE FROM fc_session WHERE id = ?;"),
+  delete_session: db.prepare("DELETE FROM ht_session WHERE id = ?;"),
 };
 
 export function createSession(user_id, res) {

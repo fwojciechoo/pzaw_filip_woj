@@ -1,3 +1,11 @@
+<% if (locals.errors && errors.length > 0) { %>
+  <ul>
+    <% errors.forEach(function(error) { %>
+      <li><%= error %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
 <form action="/add_review/<%=hotel.slug%>" method="POST">
   <div>
     <label for="review_front">Tytuł</label>
@@ -6,27 +14,29 @@
       name="front"
       id="review_front"
       required
-      minlength="1"
-      maxlength="500"
+      minlength="3"
+      maxlength="100"
       <% if (locals.front){ %>
       value="<%= front %>"
       <% }%>
     />
   </div>
+
   <div>
     <label for="review_back">Tekst</label>
     <input
       type="text"
       name="back"
-      id="review_front"
+      id="review_back"
       required
-      minlength="1"
+      minlength="10"
       maxlength="500"
       <% if (locals.back){ %>
       value="<%= back %>"
       <% }%>
     />
   </div>
+
   <div>
     <button>Dodaj</button>
   </div>

@@ -4,19 +4,20 @@ const db_path = "./db.sqlite";
 const db = new DatabaseSync(db_path);
 
 db.exec(
-  `CREATE TABLE IF NOT EXISTS fc_hotels (
+  `CREATE TABLE IF NOT EXISTS ht_hotels (
     hotel_id    INTEGER PRIMARY KEY,
     slug          TEXT UNIQUE NOT NULL,
     name          TEXT NOT NULL,
-    author_id     INTEGER NOT NULL REFERENCES fc_users(user_id) ON DELETE NO ACTION
+    author_id     INTEGER NOT NULL REFERENCES ht_users(user_id) ON DELETE NO ACTION
   ) STRICT;
-  CREATE TABLE IF NOT EXISTS fc_reviews (
+  CREATE TABLE IF NOT EXISTS ht_reviews (
     review_id       INTEGER PRIMARY KEY,
-    hotel_id    INTEGER NOT NULL REFERENCES fc_hotels(hotel_id) ON DELETE NO ACTION,
+    hotel_id    INTEGER NOT NULL REFERENCES ht_hotels(hotel_id) ON DELETE NO ACTION,
+    author_id INTEGER NOT NULL,
     front         TEXT NOT NULL,
     back          TEXT NOT NULL
   ) STRICT;
-    CREATE TABLE IF NOT EXISTS fc_users (
+    CREATE TABLE IF NOT EXISTS ht_users (
     user_id INTEGER PRIMARY KEY,
     username TEXT UNIQUE,
     passhash TEXT,
@@ -28,39 +29,54 @@ db.exec(
 
 const db_ops = {
   insert_hotel: db.prepare(
-    `INSERT INTO fc_hotels (slug, name, author_id) 
+    `INSERT INTO ht_hotels (slug, name, author_id) 
      VALUES (?, ?, ?) RETURNING hotel_id as id, slug, name;`,
   ),
   update_hotel_by_slug: db.prepare(
-    `UPDATE fc_hotels SET slug = $new_slug, name = $new_name 
+    `UPDATE ht_hotels SET slug = $new_slug, name = $new_name 
       WHERE slug = $slug RETURNING hotel_id AS id, slug, name, author_id;`,
   ),
   insert_review_by_hotel_slug: db.prepare(
-    `INSERT INTO fc_reviews (hotel_id, front, back) VALUES (
-      (SELECT hotel_id FROM fc_hotels WHERE slug = ?),
+    `INSERT INTO ht_reviews (hotel_id, author_id, front, back) VALUES (
+      (SELECT hotel_id FROM ht_hotels WHERE slug = ?),
+      ?,
       ?, 
       ?
     ) 
-    RETURNING review_id AS id, front, back;`,
+    RETURNING review_id AS id, author_id, front, back;`,
   ),
   get_hotel_summaries: db.prepare(
-    "SELECT slug, name, author_id FROM fc_hotels;",
+    "SELECT slug, name, author_id FROM ht_hotels;",
   ),
   get_hotel_summary_by_hotel_id: db.prepare(
-    "SELECT slug, name, author_id FROM fc_hotels WHERE hotel_id = ?;",
+    "SELECT slug, name, author_id FROM ht_hotels WHERE hotel_id = ?;",
   ),
   get_hotel_by_slug: db.prepare(
-    "SELECT hotel_id AS id, slug, name, author_id FROM fc_hotels WHERE slug = ?;",
+    "SELECT hotel_id AS id, slug, name, author_id FROM ht_hotels WHERE slug = ?;",
   ),
   get_review_by_id: db.prepare(
-    "SELECT review_id AS id, front, back FROM fc_reviews WHERE review_id = ?;",
+    "SELECT review_id AS id, hotel_id, author_id, front, back FROM ht_reviews WHERE review_id = ?;",
   ),
   update_review_by_id: db.prepare(
-    "UPDATE fc_reviews SET front = ?, back = ? WHERE review_id = ? RETURNING review_id, front, back;",
+    "UPDATE ht_reviews SET front = ?, back = ? WHERE review_id = ? RETURNING review_id, front, back;",
   ),
-  delete_review_by_id: db.prepare("DELETE FROM fc_reviews WHERE review_id = ?;"),
+  delete_review_by_id: db.prepare("DELETE FROM ht_reviews WHERE review_id = ?;"),
   get_reviews_by_hotel_id: db.prepare(
-    "SELECT review_id AS id, front, back FROM fc_reviews WHERE hotel_id = ?;",
+   `SELECT 
+    ht_reviews.review_id AS id,
+    ht_reviews.author_id,
+    ht_reviews.front,
+    ht_reviews.back,
+    ht_users.username
+  FROM ht_reviews
+  JOIN ht_users ON ht_reviews.author_id = ht_users.user_id
+  WHERE ht_reviews.hotel_id = ?;`,
+  ),
+  delete_reviews_by_hotel_slug: db.prepare(
+    "DELETE FROM ht_reviews WHERE hotel_id = (SELECT hotel_id FROM ht_hotels WHERE slug = ?);"
+  ),
+  delete_hotel_by_slug: db.prepare(
+    "DELETE FROM ht_hotels WHERE slug = ?;"
   ),
 };
 
@@ -84,6 +100,15 @@ export function hasReview(reviewId) {
   return hotel != null;
 }
 
+export function getReview(reviewId) {
+  return db_ops.get_review_by_id.get(reviewId);
+}
+
+export function deleteHotelBySlug(slug) {
+  db_ops.delete_reviews_by_hotel_slug.run(slug);
+  return db_ops.delete_hotel_by_slug.run(slug);
+}
+
 export function getHotel(slug) {
   let hotel = db_ops.get_hotel_by_slug.get(slug);
   if (hotel != null) {
@@ -100,6 +125,7 @@ export function getHotel(slug) {
 export function addReview(hotelSlug, review) {
   return db_ops.insert_review_by_hotel_slug.get(
     hotelSlug,
+    review.author_id,
     review.front,
     review.back,
   );
@@ -134,8 +160,13 @@ export function validateReviewData(review) {
       if (typeof review[field] != "string")
         errors.push(`'${field}' expected to be string`);
       else {
-        if (review[field].length < 1 || review[field].length > 500)
-          errors.push(`'${field}' expected length: 1-500`);
+        if (field === "front" && (review[field].length < 3 || review[field].length > 100)) {
+          errors.push("Tytuł opinii powinien mieć od 3 do 100 znaków");
+        }
+        
+        if (field === "back" && (review[field].length < 10 || review[field].length > 500)) {
+          errors.push("Treść opinii powinna mieć od 10 do 500 znaków");
+        }
       }
     }
   }
@@ -187,4 +218,6 @@ export default {
   validateReviewData,
   validateHotelName,
   generateHotelSlug,
+  deleteHotelBySlug,
+  getReview,
 };
