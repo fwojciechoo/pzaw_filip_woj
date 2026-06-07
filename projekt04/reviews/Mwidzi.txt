@@ -1,0 +1,36 @@
+# Funkcjonalność
+- Użytkownik nie może usunąć ani edytować swojej opinii
+- Opinie zalogowanego użytkownika dalej wyświetlają się jako "Anonimowy użytkownik", nie wiem czy to celowe czy nie
+- Jako administrator możemy dodawać i edytowaćhotele, lecz nie można ich usuwać
+- nie ma restrykcji aprop treści opinii - można wprowadzić opinię która ma po jednym znaku w tytule i w tekście
+- nie ma możliwości ustawienia hasła administratora, w readme nie ma wzmianki jakie hasło jest hardcoded, trzeba wnikać w kod aby siędowiedzieć
+
+# UI
+- W opiniach hoteli nazwa użytkownika nie jest w żaden sposób wizualnie oddzielona od samej opini, zlewa się w tekst
+- jeżeli wejdzie się w zarządzanie opiniami hotelu który nie ma opinii, zalogowanym jako administrator, to pokazuje siętekst który raczej nie ma zbytnio sensu - "W tym zestawie nie ma żadnych hotelek. Dodaj nowe poniżej." (hardcoded tekst w manage_reviews.ejs)
+- wchodząc w hotel tytuł zmienia się na nazwe hotelu, według mnie powinien być dodany jeszcze jakiś tekst w styklu "opinie o {nazwa hotelu}" albo ustawić zupełnie inny stały tekst dla tej podstrony
+- teksty błedu podczas dodawania hotelu mogły by być bardziej wyróżnione wizualnie 
+- w formulażach można by dodaćjedną linijkę odstępu miedzy polami tekstowymi a przyciskami wysyłającymi
+- można by wyrównać pola tekstowe w formularzu opinii
+
+### Zarówno tryb jasny jak i ciemny wyglądają schludnie, nawigacja jest intuicyjna, ważne elementy są oddzielonie wizualnie od reszty
+
+# README
+- Przejżyste graficznie i nie owija w bawełne, ale można by zamienić <link-do-repo> i <nazwa-folderu> w sekcji instalacja na faktyczne linki i ścieżki aby komendy działały od razu po wklejeniu, oraz sekcję uprawnienia można by przenieść wyżej lub włączyć w sekcję "Funkcje".
+
+# Kod 
+- zupełny brak dokumentacji i komentarzy - trzeba wszystko analizować samemu, wystarczyłyby chociażkomentaże opisujące jaką funkcjonalność implementuje dana sekcja kodu
+- jest zimplementowana funkcjonalność pokazywania ostatnio oglądanego hotelu, lecz nie wygląda na to żeby działała
+- gdy spróbujemy wpisać w linku hotel który nie istnieje strona wyrzuca błąd
+- w częściach kodu dotyczących dodawania opinii nazewnictwo typu "front" i "back" ma bardzo mało sensu (np. linia 105, 106 w index.js, linia 9 i 10 populate_db.js)
+- niezbyt ważne ale boli w oczy, niektóre części kodu są wcięte o pojedyńczą spację co prowadzi do dość dziwnego i niespójnego formatowania w tych segmentach kodu
+- można by dość łatwo oczyścić kod, jest tu dużo niepotrzebnych wcięć przez nic nie wnoszące bloki else po IFach, które i tak kończą działanie segmentu kodu (np. w sekcji kodu miedzy 234 a 263 linijkami index.js)
+
+### Oprócz tych uwag kod jest naprawdę solidny
+
+# Dodatkowe małe uwagi
+- pusty plik chmod który nic nie robi
+- nie ma niczego w zarządzaniu cookies
+- nazwy tabeli w bazie zaczynają się od fc, co wskazuje na przykładowy projekt flashcards a nie ten
+- aby uruchomić po raz drugi populate_db trzeba ręcznie usunąć plik bazy, można by to zrobić automatycznie
+- nazwa pliku /views/forms/generic.ejs zbyt dużo nie mówi
