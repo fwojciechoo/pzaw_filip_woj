@@ -6,9 +6,15 @@ Aplikacja webowa umożliwiająca przeglądanie hoteli oraz dodawanie opinii prze
 
 - Rejestracja i logowanie użytkowników
 - Obsługa sesji
-- Dodawanie opinii o hotelach
-- Role administratora
+- Przeglądanie listy hoteli
+- Wyświetlanie szczegółów hoteli
+- Dodawanie i usuwanie własnych opinii
+- Role użytkowników i administratorów
+- Dodawanie, edycja i usuwanie hoteli przez administratora
+- Zarządzanie opiniami przez administratora
 - Motyw jasny / ciemny
+- Obsługa plików cookie
+- Zapamiętywanie ostatnio odwiedzonych hoteli
 - Przechowywanie danych w SQLite
 
 ## Technologie
@@ -54,20 +60,33 @@ hasło: test12345
 - `models/` – komunikacja z bazą danych
 - `views/` – widoki EJS
 - `public/` – pliki statyczne
+- `utils/` - skrypty pomocnicze
 
 ## EndPointy
 
-| Metoda | Ścieżka           | Opis                       |
-| ------ | ----------------- | -------------------------- |
-| GET    | /                 | Strona główna              |
-| GET    | /login            | Formularz logowania        |
-| POST   | /login            | Logowanie użytkownika      |
-| GET    | /register         | Formularz rejestracji      |
-| POST   | /register         | Rejestracja użytkownika    |
-| GET    | /logout           | Wylogowanie                |
-| GET    | /view/:slug       | Szczegóły hotelu           |
-| GET    | /new_review/:slug | Formularz dodawania opinii |
-| POST   | /new_review/:slug | Dodanie opinii             |
+| Metoda | Ścieżka                                    |
+| ------ | ------------------------------------------ |
+| GET    | `/`                                        |
+| GET    | `/view/:hotel_slug`                        |
+| GET    | `/new_hotel`                               |
+| POST   | `/new_hotel`                               |
+| GET    | `/edit/:hotel_slug`                        |
+| POST   | `/edit/:hotel_slug`                        |
+| POST   | `/edit/:hotel_slug/:review_id`             |
+| POST   | `/delete/:hotel_slug/:review_id`           |
+| POST   | `/delete_my_review/:hotel_slug/:review_id` |
+| POST   | `/delete_hotel/:hotel_slug`                |
+| POST   | `/add_review/:hotel_slug`                  |
+| GET    | `/auth/signup`                             |
+| POST   | `/auth/signup`                             |
+| GET    | `/auth/login`                              |
+| POST   | `/auth/login`                              |
+| GET    | `/auth/logout`                             |
+| POST   | `/settings/toggle-theme`                   |
+| POST   | `/settings/accept-cookies`                 |
+| POST   | `/settings/decline-cookies`                |
+| POST   | `/settings/manage-cookies`                 |
+
 
 
 
