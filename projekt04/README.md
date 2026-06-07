@@ -55,6 +55,22 @@ hasło: test12345
 - `views/` – widoki EJS
 - `public/` – pliki statyczne
 
+## EndPointy
+
+| Metoda | Ścieżka           | Opis                       |
+| ------ | ----------------- | -------------------------- |
+| GET    | /                 | Strona główna              |
+| GET    | /login            | Formularz logowania        |
+| POST   | /login            | Logowanie użytkownika      |
+| GET    | /register         | Formularz rejestracji      |
+| POST   | /register         | Rejestracja użytkownika    |
+| GET    | /logout           | Wylogowanie                |
+| GET    | /view/:slug       | Szczegóły hotelu           |
+| GET    | /new_review/:slug | Formularz dodawania opinii |
+| POST   | /new_review/:slug | Dodanie opinii             |
+
+
+
 ## Uprawnienia
 
 Tylko administrator może zarządzać dodawć hotele oraz zarządzać opiniami.
