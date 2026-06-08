@@ -31,6 +31,5 @@
 # Dodatkowe małe uwagi
 - pusty plik chmod który nic nie robi
 - nie ma niczego w zarządzaniu cookies
-- nazwy tabeli w bazie zaczynają się od fc, co wskazuje na przykładowy projekt flashcards a nie ten
 - aby uruchomić po raz drugi populate_db trzeba ręcznie usunąć plik bazy, można by to zrobić automatycznie
 - nazwa pliku /views/forms/generic.ejs zbyt dużo nie mówi
