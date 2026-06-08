@@ -1,0 +1,3 @@
+no ogolnie to ok, nie wiem czemu tylko masz osobno funkcje do bazy i query, i css nie jest zagniezdzony
+theme nie robi sie przyciskiem czy co tam jest, tylko media prefers dark color schoeme czy cos w tym stylu, fajnie że zmienne w cssie użyte, ale lepiej je dać do :root 
+powodzenia, czas masz do dzisiaj
