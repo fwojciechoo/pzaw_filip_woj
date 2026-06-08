@@ -1,30 +1,38 @@
 <%- include("head.partial.ejs") %>
+
 <main>
   <h1><%= title %></h1>
-  <div>
-    <% if (locals.errors != null) {%>
-    <ul id="errors">
-      <% errors.forEach(function(error){ %>
-      <li><%= error %></li>
-      <% }) %>
-    </ul>
+
+  <section class="form-section">
+    <% if (locals.errors && errors.length > 0) { %>
+      <ul id="errors">
+        <% errors.forEach(function(error){ %>
+          <li><%= error %></li>
+        <% }) %>
+      </ul>
     <% } %>
+
+    <h2>Edycja hotelu</h2>
     <%- include("forms/edit_name.ejs") %>
+
+    <h2>Opinie hotelu</h2>
     <% if (locals.hotel.reviews && locals.hotel.reviews.length > 0) { %>
       <ul id="hotelreviews">
         <% hotel.reviews.forEach(function(review){ %>
-        <li>
-          <%- include("forms/edit_review.ejs", {review, hotel}) %>
-          <form class="hotelreview-action" action="/delete/<%= hotel.slug %>/<%= review.id %>" method="POST">
-            <button>Usuń</button>
-          </form>
-        </li>
+          <li class="review-card">
+            <div class="review-author">Autor: <%= review.username %></div>
+            <%- include("forms/edit_review.ejs", { review, hotel }) %>
+            <form class="hotelreview-action inline-form" action="/delete/<%= hotel.slug %>/<%= review.id %>" method="POST">
+              <button>Usuń opinię</button>
+            </form>
+          </li>
         <% }) %>
       </ul>
     <% } else { %>
-      <p>Ten hotel nie ma jeszcze żadnych opinii..</p>
+      <p>Ten hotel nie ma jeszcze żadnych opinii.</p>
     <% } %>
-  </div>
+  </section>
+
   <a href="/view/<%= hotel.slug %>">Powrót</a>
 </main>
 

@@ -1,20 +1,25 @@
-# Opis
+# Projekt 04 — opinie o hotelach
 
-Aplikacja webowa umożliwiająca przeglądanie hoteli oraz dodawanie opinii przez użytkowników.
+Aplikacja webowa umożliwia przeglądanie hoteli oraz dodawanie opinii przez zalogowanych użytkowników.
 
-## Funkcje
+## Funkcje i uprawnienia
 
 - Rejestracja i logowanie użytkowników
 - Obsługa sesji
 - Przeglądanie listy hoteli
-- Wyświetlanie szczegółów hoteli
-- Dodawanie i usuwanie własnych opinii
-- Role użytkowników i administratorów
+- Wyświetlanie szczegółów hotelu i opinii
+- Dodawanie opinii przez zalogowanych użytkowników
+- Usuwanie własnych opinii przez autora
+- Panel administratora
 - Dodawanie, edycja i usuwanie hoteli przez administratora
-- Zarządzanie opiniami przez administratora
+- Edycja i usuwanie opinii przez administratora
+- Walidacja opinii:
+  - tytuł: od 3 do 100 znaków
+  - treść: od 10 do 500 znaków
 - Motyw jasny / ciemny
-- Obsługa plików cookie
-- Zapamiętywanie ostatnio odwiedzonych hoteli
+- Zarządzanie zgodą na cookies
+- Zapamiętywanie ostatnio oglądanych hoteli osobno dla każdego użytkownika
+- Obsługa strony 404 dla nieistniejących hoteli i podstron
 - Przechowywanie danych w SQLite
 
 ## Technologie
@@ -28,24 +33,25 @@ Aplikacja webowa umożliwiająca przeglądanie hoteli oraz dodawanie opinii prze
 ## Instalacja
 
 ```bash
-git clone <link-do-repo>
-cd <nazwa-folderu>
+git clone https://github.com/fwojciechoo/pzaw_filip_woj.git
+cd pzaw_filip_woj/projekt04
 
 npm install
 
 bash utils/generate_env.sh > .env
 
-node utils/populate_db.js
+npm run populate_db
 
 node index.js
 ```
 
-Dostępne na:
+Aplikacja jest dostępna pod adresem:
 
 ```txt
 http://localhost:8000
 ```
-## Konto testowe
+
+## Konta testowe
 
 Użytkownik:
 
@@ -54,45 +60,41 @@ login: test
 hasło: test12345
 ```
 
+Administrator:
+
+```txt
+login: admin
+hasło: admin123
+```
+
+Administrator może dodawać, edytować i usuwać hotele oraz zarządzać opiniami.
+
 ## Struktura projektu
 
-- `controllers/` – obsługa routingu i logiki
-- `models/` – komunikacja z bazą danych
+- `controllers/` – logika logowania, rejestracji i autoryzacji
+- `models/` – komunikacja z bazą danych SQLite
 - `views/` – widoki EJS
-- `public/` – pliki statyczne
-- `utils/` - skrypty pomocnicze
+- `views/forms/` – formularze używane w widokach
+- `public/` – pliki statyczne, CSS i ikony
+- `utils/` – skrypty pomocnicze, np. generowanie `.env` i uzupełnianie bazy
 
-## EndPointy
+## Najważniejsze endpointy
 
-| Metoda | Ścieżka                                    |
-| ------ | ------------------------------------------ |
-| GET    | `/`                                        |
-| GET    | `/view/:hotel_slug`                        |
-| GET    | `/new_hotel`                               |
-| POST   | `/new_hotel`                               |
-| GET    | `/edit/:hotel_slug`                        |
-| POST   | `/edit/:hotel_slug`                        |
-| POST   | `/edit/:hotel_slug/:review_id`             |
-| POST   | `/delete/:hotel_slug/:review_id`           |
-| POST   | `/delete_my_review/:hotel_slug/:review_id` |
-| POST   | `/delete_hotel/:hotel_slug`                |
-| POST   | `/add_review/:hotel_slug`                  |
-| GET    | `/auth/signup`                             |
-| POST   | `/auth/signup`                             |
-| GET    | `/auth/login`                              |
-| POST   | `/auth/login`                              |
-| GET    | `/auth/logout`                             |
-| POST   | `/settings/toggle-theme`                   |
-| POST   | `/settings/accept-cookies`                 |
-| POST   | `/settings/decline-cookies`                |
-| POST   | `/settings/manage-cookies`                 |
-
-
-
-
-## Uprawnienia
-
-Tylko administrator może zarządzać dodawć hotele oraz zarządzać opiniami.
+| Metoda | Ścieżka                                    | Opis |
+| ------ | ------------------------------------------ | ---- |
+| GET    | `/`                                        | Lista hoteli |
+| GET    | `/view/:hotel_slug`                        | Szczegóły hotelu i opinie |
+| POST   | `/add_review/:hotel_slug`                  | Dodanie opinii |
+| GET    | `/new_hotel`                               | Formularz dodawania hotelu |
+| POST   | `/new_hotel`                               | Dodanie hotelu |
+| GET    | `/edit/:hotel_slug`                        | Panel zarządzania hotelem |
+| POST   | `/edit/:hotel_slug`                        | Edycja hotelu |
+| POST   | `/edit/:hotel_slug/:review_id`             | Edycja opinii przez administratora |
+| POST   | `/delete/:hotel_slug/:review_id`           | Usunięcie opinii przez administratora |
+| POST   | `/delete_my_review/:hotel_slug/:review_id` | Usunięcie własnej opinii |
+| POST   | `/delete_hotel/:hotel_slug`                | Usunięcie hotelu |
+| GET    | `/settings/manage-cookies`                 | Zarządzanie cookies |
+| POST   | `/settings/manage-cookies`                 | Zapis ustawień cookies |
 
 ## Autor
 

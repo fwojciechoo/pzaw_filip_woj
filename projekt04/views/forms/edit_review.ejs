@@ -1,6 +1,30 @@
-<form class="hotelreview-action" action="/edit/<%= hotel.slug %>/<%= review.id %>" method="POST">
-    <input type="text" name="front" id="hotelreview-<%= review.id %>-front" value="<%= review.front %>" required minlength="1" maxlength="500"> 
-    -
-    <input type="text" name="back" id="hotelreview-<%= review.id %>-back" value="<%= review.back %>" required minlength="1" maxlength="500"> 
-    <button>Zapisz</button>
-</form>
+<form class="hotelreview-action review-form" action="/edit/<%= hotel.slug %>/<%= review.id %>" method="POST">
+    <div class="form-field">
+      <label for="hotelreview-<%= review.id %>-title">Tytuł</label>
+      <input
+        type="text"
+        name="title"
+        id="hotelreview-<%= review.id %>-title"
+        value="<%= review.title %>"
+        required
+        minlength="3"
+        maxlength="100"
+      />
+    </div>
+  
+    <div class="form-field">
+      <label for="hotelreview-<%= review.id %>-content">Tekst</label>
+      <textarea
+        name="content"
+        id="hotelreview-<%= review.id %>-content"
+        required
+        minlength="10"
+        maxlength="500"
+      ><%= review.content %></textarea>
+    </div>
+  
+    <div class="form-actions">
+      <button>Zapisz</button>
+    </div>
+  </form>
+  

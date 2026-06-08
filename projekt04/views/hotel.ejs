@@ -1,31 +1,37 @@
 <%- include("head.partial.ejs") %>
+
 <main>
   <h1><%= title %></h1>
+
   <% if (user && user.is_admin) { %>
     <a href="/edit/<%= hotel.slug %>" class="action-link">Zarządzaj opiniami</a>
   <% } %>
+
   <% if (hotel.reviews && hotel.reviews.length > 0) { %>
     <ul id="hotelreviews">
       <% hotel.reviews.forEach(function(review){ %>
-        <li>
-          <b><%= review.username %>: </b> <%= review.front %> - <%= review.back %>
-          <br>
+        <li class="review-card">
+          <div class="review-author">Autor: <%= review.username %></div>
+          <div class="review-title"><%= review.title %></div>
+          <div class="review-content"><%= review.content %></div>
+
           <% if (user && review.author_id === user.id) { %>
-            <form action="/delete_my_review/<%= hotel.slug %>/<%= review.id %>" method="POST" style="display:inline;">
-              <button><b><i>Usuń</i></b></button>
+            <form action="/delete_my_review/<%= hotel.slug %>/<%= review.id %>" method="POST" class="inline-form">
+              <button>Usuń moją opinię</button>
             </form>
           <% } %>
         </li>
       <% }) %>
     </ul>
   <% } else { %>
-    <p>Nie ma żadnych opinii dla hotelu.</p>
+    <p>Ten hotel nie ma jeszcze żadnych opinii.</p>
   <% } %>
+
   <% if (user) { %>
-  <div>
-    <h3>Napisz opinie</h3>
-    <%- include("forms/new_review.ejs") %>
-  </div>
+    <section class="form-section">
+      <h3>Napisz opinię</h3>
+      <%- include("forms/new_review.ejs") %>
+    </section>
   <% } %>
 </main>
 

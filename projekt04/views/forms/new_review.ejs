@@ -1,43 +1,37 @@
 <% if (locals.errors && errors.length > 0) { %>
-  <ul>
+  <ul id="errors">
     <% errors.forEach(function(error) { %>
       <li><%= error %></li>
     <% }) %>
   </ul>
 <% } %>
 
-<form action="/add_review/<%=hotel.slug%>" method="POST">
-  <div>
-    <label for="review_front">Tytuł</label>
+<form action="/add_review/<%= hotel.slug %>" method="POST" class="review-form">
+  <div class="form-field">
+    <label for="review_title">Tytuł</label>
     <input
       type="text"
-      name="front"
-      id="review_front"
+      name="title"
+      id="review_title"
       required
       minlength="3"
       maxlength="100"
-      <% if (locals.front){ %>
-      value="<%= front %>"
-      <% }%>
+      value="<%= locals.title_value || "" %>"
     />
   </div>
 
-  <div>
-    <label for="review_back">Tekst</label>
-    <input
-      type="text"
-      name="back"
-      id="review_back"
+  <div class="form-field">
+    <label for="review_content">Tekst</label>
+    <textarea
+      name="content"
+      id="review_content"
       required
       minlength="10"
       maxlength="500"
-      <% if (locals.back){ %>
-      value="<%= back %>"
-      <% }%>
-    />
+    ><%= locals.content_value || "" %></textarea>
   </div>
 
-  <div>
+  <div class="form-actions">
     <button>Dodaj</button>
   </div>
 </form>

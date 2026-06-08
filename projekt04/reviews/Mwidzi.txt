@@ -32,4 +32,4 @@
 - pusty plik chmod który nic nie robi
 - nie ma niczego w zarządzaniu cookies
 - aby uruchomić po raz drugi populate_db trzeba ręcznie usunąć plik bazy, można by to zrobić automatycznie
-- nazwa pliku /views/forms/generic.ejs zbyt dużo nie mówi
+- nazwa pliku /views/forms/auth_form.ejs zbyt dużo nie mówi

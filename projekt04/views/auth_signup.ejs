@@ -3,7 +3,7 @@
 <main>
   <h1><%= title %></h1>
   <div>
-    <%- include("forms/generic.ejs", form) %>
+    <%- include("forms/auth_form.ejs", form) %>
   </div>
   <span>Masz już konto? <a href="/auth/login<%- (locals.nextUrl ? `?next=${encodeURIComponent(nextUrl)}` : '') %>">Zaloguj się!</a></span>
 </main>

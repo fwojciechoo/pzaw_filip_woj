@@ -158,3 +158,87 @@ button:hover, .cookieButton:hover {
   text-align: center;
 }
 
+
+
+/* ERRORS */
+
+#errors {
+  color: var(--text-error);
+  background: rgba(248, 113, 113, 0.12);
+  border: 1px solid var(--text-error);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  list-style-position: inside;
+}
+
+/* REVIEW AND HOTEL FORMS */
+
+.form-section {
+  margin-top: 1.5rem;
+}
+
+.review-form {
+  max-width: 42rem;
+  margin-top: 0.75rem;
+}
+
+.form-field {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.form-field label {
+  width: 10rem;
+  color: var(--text-muted);
+}
+
+.form-field input,
+.form-field textarea {
+  flex: 1;
+  padding: 0.55rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: var(--bg-accent);
+  color: var(--text-main);
+}
+
+.form-field textarea {
+  min-height: 5rem;
+  resize: vertical;
+}
+
+.form-actions {
+  margin-top: 1rem;
+  padding-left: 11rem;
+}
+
+/* REVIEWS */
+
+.review-card {
+  background: var(--bg-accent);
+  margin: 0.75rem 0;
+  padding: 0.85rem;
+  border-radius: 0.5rem;
+}
+
+.review-author {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 0.35rem;
+}
+
+.review-title {
+  font-weight: bold;
+  margin-bottom: 0.35rem;
+}
+
+.review-content {
+  line-height: 1.4;
+}
+
+.inline-form {
+  display: inline-block;
+  margin-top: 0.5rem;
+}
